@@ -2,14 +2,17 @@ import { useParams } from 'react-router-dom'
 import { useEffect, useCallback } from 'react'
 import { useApp } from '../context/AppContext'
 import { getChapter } from '../data/chapters'
+import { getExercises } from '../data/exercises'
 import { Sidebar } from './Sidebar'
 import { TopBar } from './TopBar'
 import { MarkdownRenderer } from './MarkdownRenderer'
+import { ExercisePanel } from './ExercisePanel'
 
 export function ChapterPage() {
   const { chapterId } = useParams<{ chapterId: string }>()
   const { progress } = useApp()
   const chapter = getChapter(chapterId ?? '')
+  const exercises = getExercises(chapterId ?? '')
 
   useEffect(() => {
     if (chapterId) progress.setCurrentChapter(chapterId)
@@ -57,13 +60,17 @@ export function ChapterPage() {
             <MarkdownRenderer chapterDir={chapter.dir} onReachBottom={handleReachBottom} />
           </div>
 
-          {/* Exercise panel placeholder */}
-          <div
-            className="rounded-xl border p-6 text-center"
-            style={{ borderColor: 'var(--border)', background: 'var(--bg-secondary)' }}
-          >
-            <p style={{ color: 'var(--text-secondary)' }}>本章练习尚未编写</p>
-          </div>
+          {/* Exercise panel */}
+          {exercises ? (
+            <ExercisePanel chapterExercises={exercises} />
+          ) : (
+            <div
+              className="rounded-xl border p-6 text-center"
+              style={{ borderColor: 'var(--border)', background: 'var(--bg-secondary)' }}
+            >
+              <p style={{ color: 'var(--text-secondary)' }}>本章练习尚未编写</p>
+            </div>
+          )}
         </main>
       </div>
     </div>
