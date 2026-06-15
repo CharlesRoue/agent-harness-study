@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { getChapter } from '../data/chapters'
-import { Logo } from './Logo'
 
 function SunIcon() {
   return (
@@ -44,8 +43,7 @@ export function TopBar() {
           onClick={() => navigate('/')}
           className="topbar-brand"
         >
-          <Logo size={24} />
-          <span className="topbar-brand-text">Agent Harness</span>
+          <span className="topbar-brand-text">Level Up Agent</span>
         </button>
 
         {chapter && (

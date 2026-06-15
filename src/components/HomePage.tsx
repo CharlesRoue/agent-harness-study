@@ -1,7 +1,6 @@
 import { useApp } from '../context/AppContext'
 import { chapters } from '../data/chapters'
 import { useNavigate } from 'react-router-dom'
-import { Logo } from './Logo'
 
 export function HomePage() {
   const { progress } = useApp()
@@ -28,10 +27,9 @@ export function HomePage() {
     <div className="home">
       {/* Hero */}
       <section className="home-hero">
-        <Logo size={48} />
-        <h1 className="home-title">Agent Harness</h1>
+        <h1 className="home-title">Level Up Agent</h1>
         <p className="home-subtitle">
-          从零掌握 Agent Harness 工程
+          从零掌握 Agent 工程
         </p>
         <p className="home-desc">
           20 个渐进章节，从 Agent Loop 到 Comprehensive Agent，<br />
