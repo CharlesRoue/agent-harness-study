@@ -10,9 +10,24 @@ interface MarkdownRendererProps {
   onReachBottom?: () => void
 }
 
+function ImageLightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [onClose])
+
+  return (
+    <div className="img-lightbox" onClick={onClose}>
+      <img src={src} alt={alt} onClick={e => e.stopPropagation()} />
+    </div>
+  )
+}
+
 export function MarkdownRenderer({ chapterDir, onReachBottom }: MarkdownRendererProps) {
   const [content, setContent] = useState<string>('')
   const [loading, setLoading] = useState(true)
+  const [zoomedImg, setZoomedImg] = useState<{ src: string; alt: string } | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -61,10 +76,25 @@ export function MarkdownRenderer({ chapterDir, onReachBottom }: MarkdownRenderer
             if (href?.startsWith('README.') || href?.startsWith('../s')) return null
             return <a href={href} {...props}>{children}</a>
           },
+          img: ({ src, alt, ...props }) => (
+            <img
+              src={src}
+              alt={alt}
+              {...props}
+              onClick={() => setZoomedImg({ src: src!, alt: alt || '' })}
+            />
+          ),
         }}
       >
         {content}
       </ReactMarkdown>
+      {zoomedImg && (
+        <ImageLightbox
+          src={zoomedImg.src}
+          alt={zoomedImg.alt}
+          onClose={() => setZoomedImg(null)}
+        />
+      )}
       <div className="scroll-sentinel h-1" />
     </div>
   )
