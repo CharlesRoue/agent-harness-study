@@ -7,6 +7,7 @@ import { Sidebar } from './Sidebar'
 import { TopBar } from './TopBar'
 import { MarkdownRenderer } from './MarkdownRenderer'
 import { ExercisePanel } from './ExercisePanel'
+import { ChapterNav } from './ChapterNav'
 
 export function ChapterPage() {
   const { chapterId } = useParams<{ chapterId: string }>()
@@ -71,6 +72,9 @@ export function ChapterPage() {
               <p style={{ color: 'var(--text-secondary)' }}>本章练习尚未编写</p>
             </div>
           )}
+
+          {/* Chapter navigation */}
+          <ChapterNav chapterId={chapter.id} />
         </main>
       </div>
     </div>
