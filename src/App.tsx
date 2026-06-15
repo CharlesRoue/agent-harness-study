@@ -1,6 +1,18 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { AppProvider } from './context/AppContext'
+import { HomePage } from './components/HomePage'
+import { ChapterPage } from './components/ChapterPage'
+
 export default function App() {
-  return <div style={{ padding: '2rem' }}>
-    <h1>Agent Harness 学习</h1>
-    <p>项目脚手架已就绪，开始构建...</p>
-  </div>
+  return (
+    <AppProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/chapter/:chapterId" element={<ChapterPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AppProvider>
+  )
 }
