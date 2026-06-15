@@ -32,12 +32,13 @@ export function MarkdownRenderer({ chapterDir, onReachBottom }: MarkdownRenderer
 
   useEffect(() => {
     setLoading(true)
-    fetch(`/content/${chapterDir}/README.md`)
+    const base = import.meta.env.BASE_URL
+    fetch(`${base}content/${chapterDir}/README.md`)
       .then(r => r.ok ? r.text() : Promise.reject('Not found'))
       .then(text => {
         const fixed = text.replace(
           /!\[([^\]]*)\]\(images\/([^)]+)\)/g,
-          `![$1](/course-assets/${chapterDir}/$2)`
+          `![$1](${base}course-assets/${chapterDir}/$2)`
         )
         setContent(fixed)
         setLoading(false)
