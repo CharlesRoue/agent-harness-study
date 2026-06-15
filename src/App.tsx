@@ -6,7 +6,7 @@ import { ChapterPage } from './components/ChapterPage'
 export default function App() {
   return (
     <AppProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/chapter/:chapterId" element={<ChapterPage />} />
