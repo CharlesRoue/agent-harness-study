@@ -8,7 +8,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "sync": "npx tsx scripts/sync-content.ts",
+    "sync:from": "npx tsx scripts/sync-content.ts"
   },
   "dependencies": {
     "react": "^19.2.6",
@@ -35,6 +37,7 @@
     "globals": "^17.6.0",
     "jsdom": "^29.1.1",
     "tailwindcss": "^4.3.1",
+    "tsx": "^4.22.4",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
     "vite": "^8.0.12",
