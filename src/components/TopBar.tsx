@@ -1,46 +1,112 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
+import { getChapter } from '../data/chapters'
+
+function BookIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+      <path d="M8 7h6" />
+      <path d="M8 11h4" />
+    </svg>
+  )
+}
+
+function SunIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+    </svg>
+  )
+}
+
+function MoonIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+    </svg>
+  )
+}
+
+function ChevronRight() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 18l6-6-6-6" />
+    </svg>
+  )
+}
 
 export function TopBar() {
   const { theme, progress } = useApp()
   const navigate = useNavigate()
+  const { chapterId } = useParams<{ chapterId: string }>()
+  const chapter = chapterId ? getChapter(chapterId) : undefined
+
+  const pct = Math.round((progress.completedCount / 20) * 100)
 
   return (
-    <header
-      className="flex items-center justify-between px-5 py-2.5 border-b flex-shrink-0"
-      style={{ borderColor: 'var(--border)', background: 'var(--bg-secondary)' }}
-    >
-      <div className="flex items-center gap-3">
+    <header className="topbar">
+      {/* Left: branding + breadcrumb */}
+      <div className="flex items-center gap-1 min-w-0">
         <button
           onClick={() => navigate('/')}
-          className="font-bold text-base cursor-pointer border-none bg-transparent"
-          style={{ color: '#0969da' }}
+          className="topbar-brand"
         >
-          Agent Harness 学习
+          <span className="topbar-brand-icon">
+            <BookIcon />
+          </span>
+          <span className="topbar-brand-text">Agent Harness</span>
         </button>
-        <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-          learn-claude-code
-        </span>
+
+        {chapter && (
+          <div className="flex items-center gap-1 min-w-0 ml-1">
+            <span className="topbar-separator"><ChevronRight /></span>
+            <span className="topbar-chapter-tag">
+              {chapter.phase === 1 ? 'P1' : 'P2'}
+            </span>
+            <span className="topbar-chapter-num">{chapter.id}</span>
+            <span className="topbar-separator"><ChevronRight /></span>
+            <span className="topbar-chapter-title">{chapter.title}</span>
+          </div>
+        )}
       </div>
 
-      <div className="flex items-center gap-3">
+      {/* Right: controls */}
+      <div className="flex items-center gap-2.5 flex-shrink-0">
+        {/* Progress ring */}
+        <div className="topbar-progress">
+          <svg width="28" height="28" viewBox="0 0 28 28">
+            <circle
+              cx="14" cy="14" r="11"
+              fill="none"
+              stroke="var(--border)"
+              strokeWidth="2.5"
+            />
+            <circle
+              cx="14" cy="14" r="11"
+              fill="none"
+              stroke={pct === 100 ? '#238636' : '#0969da'}
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeDasharray={`${(pct / 100) * 69.12} 69.12`}
+              transform="rotate(-90 14 14)"
+              className="topbar-progress-ring"
+            />
+          </svg>
+          <span className="topbar-progress-text">
+            {progress.completedCount}<span className="topbar-progress-total">/20</span>
+          </span>
+        </div>
+
+        {/* Theme toggle */}
         <button
           onClick={theme.toggleTheme}
-          className="text-xs px-3 py-1 rounded-full border cursor-pointer"
-          style={{
-            borderColor: 'var(--border)',
-            background: 'transparent',
-            color: 'var(--text-secondary)',
-          }}
+          className="topbar-theme-btn"
+          title={theme.theme === 'light' ? '切换到暗色主题' : '切换到亮色主题'}
         >
-          {theme.theme === 'light' ? '🌙 暗色' : '☀️ 亮色'}
+          {theme.theme === 'light' ? <MoonIcon /> : <SunIcon />}
         </button>
-        <span
-          className="text-xs px-3 py-1 rounded-full text-white"
-          style={{ background: '#238636' }}
-        >
-          {progress.completedCount}/20
-        </span>
       </div>
     </header>
   )
