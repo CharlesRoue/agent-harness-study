@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { useEffect, useCallback } from 'react'
 import { useApp } from '../context/AppContext'
 import { getChapter } from '../data/chapters'
@@ -11,6 +11,7 @@ import { ChapterNav } from './ChapterNav'
 
 export function ChapterPage() {
   const { chapterId } = useParams<{ chapterId: string }>()
+  const location = useLocation()
   const { progress } = useApp()
   const chapter = getChapter(chapterId ?? '')
   const exercises = getExercises(chapterId ?? '')
@@ -18,6 +19,11 @@ export function ChapterPage() {
   useEffect(() => {
     if (chapterId) progress.setCurrentChapter(chapterId)
   }, [chapterId])
+
+  useEffect(() => {
+    const main = document.querySelector('main')
+    if (main) main.scrollTop = 0
+  }, [location.pathname])
 
   const handleReachBottom = useCallback(() => {
     if (chapterId) progress.markRead(chapterId)
