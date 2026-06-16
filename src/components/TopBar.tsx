@@ -43,7 +43,7 @@ export function TopBar() {
           onClick={() => navigate('/')}
           className="topbar-brand"
         >
-          <span className="topbar-brand-text">Level Up Agent</span>
+          <span className="topbar-brand-text">Potty Training Cyber Babies</span>
         </button>
 
         {chapter && (

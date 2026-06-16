@@ -27,7 +27,7 @@ export function HomePage() {
     <div className="home">
       {/* Hero */}
       <section className="home-hero">
-        <h1 className="home-title">Level Up Agent</h1>
+        <h1 className="home-title">Potty Training Cyber Babies</h1>
         <p className="home-subtitle">
           从零掌握 Agent 工程
         </p>
